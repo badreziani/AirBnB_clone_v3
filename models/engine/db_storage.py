@@ -53,11 +53,14 @@ class DBStorage:
 
     def get(self, cls, id):
         """retrieve one object by its id"""
-        return self.all(cls).get(id)
+        full_id = '{}.{}'.format(cls.__name__, id)
+        return self.all(classes[cls.__name__]).get(full_id)
 
     def count(self, cls=None):
         """count the number of objects in storage"""
-        return len(self.all(cls))
+        if cls is None or cls not in classes:
+            return len(self.all().values())
+        return len(self.all(classes[cls.__name__]).values())
 
     def new(self, obj):
         """add the object to the current database session"""
