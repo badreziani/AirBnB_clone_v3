@@ -34,7 +34,7 @@ class FileStorage:
             return new_dict
         return self.__objects
 
-    def def get(self, cls, id):
+    def get(self, cls, id):
         """retrieve one object by its id"""
         return self.all(cls).get(id)
 
