@@ -13,7 +13,7 @@ from models.state import State
 from models.user import User
 from os import getenv
 import sqlalchemy
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 classes = {"Amenity": Amenity, "City": City,
@@ -50,6 +50,14 @@ class DBStorage:
                     key = obj.__class__.__name__ + '.' + obj.id
                     new_dict[key] = obj
         return (new_dict)
+
+    def get(self, cls, id):
+        """retrieve one object by its id"""
+        return self.all(cls).get(id)
+
+    def count(self, cls=None):
+        """count the number of objects in storage"""
+        return len(self.all(cls))
 
     def new(self, obj):
         """add the object to the current database session"""
