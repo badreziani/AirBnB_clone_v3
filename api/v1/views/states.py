@@ -44,15 +44,15 @@ def state_delete(state_id):
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
 def state_post():
     """post http request """
-    if not request.json:
-        abort(400, description="Not a JSON")
-    if 'name' not in request.json:
-        abort(400, description="Missing name")
+    req_json = request.get_json()
+    if not req_json:
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
+    if 'name' not in req_json:
+        return make_response(jsonify({'error': 'Missing name'}), 400)
 
-    request_dict = request.get_json()
     obj = State()
 
-    for k, v in request_dict.items():
+    for k, v in req_json.items():
         setattr(obj, k, v)
 
     # add obj to current DB session and save it.
@@ -69,12 +69,12 @@ def state_update(state_id):
     if not stat_obj:
         abort(404)
 
-    if not request.json:
-        abort(400, description="Not a JSON")
+    req_json = request.get_json()
+    if not req_json:
+        return make_resonse(jsonify({'error': 'Not a JSON'}), 400)
 
-    new_dict = request.get_json()
     ignore_keys = {'id', 'created_at', 'updated_at'}
-    for k, v in new_dict.items():
+    for k, v in req_json.items():
         if k not in ignore_keys:
             setattr(stat_obj, k, v)
 
