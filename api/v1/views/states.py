@@ -3,9 +3,8 @@
 
 from models import storage
 from models.state import State
-from models.base_model import BaseModel
 from api.v1.views import app_views
-from flask import jsonify, make_response, abort
+from flask import jsonify, abort
 from flask import request
 
 
@@ -80,4 +79,4 @@ def state_update(state_id):
             setattr(stat_obj, k, v)
 
     storage.save()
-    return jsonify(BaseModel.to_dict(stat_obj)), 200
+    return jsonify(stat_obj.to_dict()), 200
