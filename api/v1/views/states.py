@@ -19,7 +19,7 @@ def get_all_states():
     return make_response(jsonify(all_list), 200)
 
 
-@app_views.route('/states/<string:state_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
 def get_state_by_id(state_id):
     """Route that returns a state by its ID"""
     stat_obj = storage.get(State, state_id)
@@ -29,7 +29,7 @@ def get_state_by_id(state_id):
     return make_response(jsonify(stat_obj.to_dict()), 200)
 
 
-@app_views.route('/states/<string:state_id>', methods=['DELETE'],
+@app_views.route('/states/<state_id>', methods=['DELETE'],
                  strict_slashes=False)
 def state_delete(state_id):
     """ delete http request"""
@@ -46,9 +46,9 @@ def state_post():
     """post http request """
     req_json = request.get_json()
     if not req_json:
-        return make_response(jsonify({'error': 'Not a JSON'}), 400)
+        abort(400, description="Not a JSON")
     if 'name' not in req_json:
-        return make_response(jsonify({'error': 'Missing name'}), 400)
+        abort(400, description="Missing name")
 
     obj = State()
 
@@ -62,7 +62,7 @@ def state_post():
     return make_response(jsonify(new_state), 201)
 
 
-@app_views.route('/states/<string:state_id>', methods=['PUT'], strict_slashes=False)
+@app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
 def state_update(state_id):
     """put http request"""
     stat_obj = storage.get(State, state_id)
@@ -71,7 +71,7 @@ def state_update(state_id):
 
     req_json = request.get_json()
     if not req_json:
-        return make_resonse(jsonify({'error': 'Not a JSON'}), 400)
+        abort(400, description="Not a JSON")
 
     ignore_keys = {'id', 'created_at', 'updated_at'}
     for k, v in req_json.items():
