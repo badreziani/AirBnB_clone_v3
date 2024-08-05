@@ -52,7 +52,7 @@ class DBStorage:
         return (new_dict)
 
     def get(self, cls, id):
-        """retrieve one object by its id"""
+        """retrieve one object by id"""
         return self.all(cls).get(cls.__name__ + '.' + id)
 
     def count(self, cls=None):
