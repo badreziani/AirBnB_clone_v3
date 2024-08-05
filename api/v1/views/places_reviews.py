@@ -28,6 +28,8 @@ def get_all_reviews(place_id):
 @app_views.route('/reviews/<review_id>', methods=['GET'],
                  strict_slashes=False)
 def get_review_by_id(review_id):
+    print(f"Received GET request for review_id: {review_id}")
+
     """Route that returns a review by its ID"""
     review_obj = storage.get(Review, review_id)
     if not review_obj:
