@@ -15,5 +15,5 @@ try:
         from models.engine.file_storage import FileStorage
         storage = FileStorage()
     storage.reload()
-except Exception as ex:
-    print(ex)
+except Exception:
+    pass
