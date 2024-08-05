@@ -6,7 +6,7 @@ from models.state import State
 from models.amenity import Amenity
 from api.v1.views import app_views
 from flask import jsonify, abort
-from flask import request
+from flask import request, make_response
 
 
 @app_views.route('/amenities', methods=['GET'], strict_slashes=False)
@@ -17,7 +17,7 @@ def get_all_amenities():
     for _, obj in amenty_dict.items():
         all_list.append(obj.to_dict())
 
-    return jsonify(all_list)
+    return make_response(jsonify(all_list), 200)
 
 
 @app_views.route('/amenities/<amenity_id>', methods=['GET'],
@@ -28,7 +28,7 @@ def get_amenity_by_id(amenity_id):
     if not amnty_obj:
         abort(404)
 
-    return jsonify(amnty_obj.to_dict())
+    return make_response(jsonify(amnty_obj.to_dict()), 200)
 
 
 @app_views.route('/amenities/<amenity_id>', methods=['DELETE'],
@@ -40,7 +40,7 @@ def amenity_delete(amenity_id):
         abort(404)
     storage.delete(amnty_obj)
     storage.save()
-    return jsonify({}), 200
+    return make_response(jsonify({}), 200)
 
 
 @app_views.route('/amenities', methods=['POST'], strict_slashes=False)
@@ -61,7 +61,7 @@ def amenity_post():
     storage.new(obj)
     storage.save()
     new_state = obj.to_dict()
-    return jsonify(new_state), 201
+    return make_response(jsonify(new_state), 201)
 
 
 @app_views.route('/amenities/<amenity_id>', methods=['PUT'],
@@ -82,4 +82,4 @@ def amenity_update(amenity_id):
             setattr(amnty_obj, k, v)
 
     storage.save()
-    return jsonify(amnty_obj.to_dict()), 200
+    return make_response(jsonify(amnty_obj.to_dict()), 200)

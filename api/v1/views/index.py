@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ script index.py"""
 
-from flask import jsonify
+from flask import jsonify, make_response
 from models import storage
 from models.city import City
 from models.user import User
@@ -18,7 +18,7 @@ classes = {"amenities": Amenity, "cities": City,
 @app_views.route('/status')
 def status():
     """ route that return status """
-    return jsonify({'status': 'OK'})
+    return make_response(jsonify({'status': 'OK'}), 200)
 
 
 @app_views.route('/stats')
@@ -29,4 +29,4 @@ def stats():
     for cls_name, cls in classes.items():
         r_dict[cls_name] = storage.count(cls)
 
-    return jsonify(r_dict)
+    return make_response(jsonify(r_dict), 200)

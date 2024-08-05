@@ -5,7 +5,7 @@ from models import storage
 from models.state import State
 from api.v1.views import app_views
 from flask import jsonify, abort
-from flask import request
+from flask import request, make_response
 
 
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
@@ -16,7 +16,7 @@ def get_all_states():
     for _, obj in state_dict.items():
         all_list.append(obj.to_dict())
 
-    return jsonify(all_list)
+    return make_response(jsonify(all_list), 200)
 
 
 @app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
@@ -26,7 +26,7 @@ def get_state_by_id(state_id):
     if not stat_obj:
         abort(404)
 
-    return jsonify(stat_obj.to_dict())
+    return make_response(jsonify(stat_obj.to_dict()), 200)
 
 
 @app_views.route('/states/<state_id>', methods=['DELETE'],
@@ -38,7 +38,7 @@ def state_delete(state_id):
         abort(404)
     storage.delete(stat_obj)
     storage.save()
-    return jsonify({}), 200
+    return make_response(jsonify({}), 200)
 
 
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
@@ -59,7 +59,7 @@ def state_post():
     storage.new(obj)
     storage.save()
     new_state = obj.to_dict()
-    return jsonify(new_state), 201
+    return make_response(jsonify(new_state), 201)
 
 
 @app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
@@ -79,4 +79,4 @@ def state_update(state_id):
             setattr(stat_obj, k, v)
 
     storage.save()
-    return jsonify(stat_obj.to_dict()), 200
+    return make_response(jsonify(stat_obj.to_dict()), 200)
