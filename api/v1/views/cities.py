@@ -55,10 +55,9 @@ def city_post(state_id):
         abort(404)
     request_dict = request.get_json()
     if not request_dict:
-        return make_respose(jsonify({'error': 'Not a JSON'}), 400)
+        abort(400, description="Not a JSON")
     if 'name' not in request_dict:
-        return make_response(jsonify({'error': 'Missing name'}), 400)
-
+        abort(400, description="Missing name")
     request_dict['state_id'] = state_id
     obj = City()
 
@@ -81,7 +80,7 @@ def city_update(city_id):
 
     new_dict = request.get_json()
     if not new_dict:
-        return make_respose(jsonify({'error': 'Not a JSON'}), 400)
+        abort(400, description="Not a JSON")
 
     new_dict = request.get_json()
     ignore_keys = {'id', 'created_at', 'updated_at'}
